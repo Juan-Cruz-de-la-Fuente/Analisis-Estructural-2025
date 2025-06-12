@@ -23,7 +23,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"  # Sidebar oculto inicialmente
 )
 
-# CSS personalizado mejorado para estilo web moderno
+# CSS personalizado 
 st.markdown("""
 <style>
     /* Importar fuente moderna */
@@ -577,7 +577,7 @@ def visualizar_estructura_moderna(mostrar_deformada=False, factor_escala=10):
     fig, ax = plt.subplots(figsize=(14, 10), facecolor='white')
     ax.set_facecolor('white')
     
-    # --- Cálculo de límites (sin cambios) ---
+    # --- Cálculo de límites ---
     x_coords = [nodo['x'] for nodo in st.session_state.nodos]
     y_coords = [nodo['y'] for nodo in st.session_state.nodos]
     if len(set(x_coords)) == 1:
@@ -591,7 +591,7 @@ def visualizar_estructura_moderna(mostrar_deformada=False, factor_escala=10):
         y_range = max(y_coords) - min(y_coords)
         y_min, y_max = (min(y_coords) - 0.1*y_range)*1.2, (max(y_coords) + 0.1*y_range)*1.2
     
-    # --- Cálculo de estructura deformada (sin cambios) ---
+    # --- Cálculo de estructura deformada ---
     nodos_deformados = None
     if mostrar_deformada and st.session_state.resultados is not None:
         nodos_deformados = []
@@ -648,7 +648,7 @@ def visualizar_estructura_moderna(mostrar_deformada=False, factor_escala=10):
             dy = p_fin_ref['y'] - p_inicio_ref['y']
 
             longitud = math.sqrt(dx**2 + dy**2)
-            distancia_offset = 0.3  # Distancia para separar la etiqueta. ¡Podés ajustar este valor!
+            distancia_offset = 0.3  # Distancia para separar la etiqueta.
 
             offset_x = 0
             offset_y = 0
@@ -668,7 +668,7 @@ def visualizar_estructura_moderna(mostrar_deformada=False, factor_escala=10):
                    fontfamily='sans-serif', zorder=20)
             # --- FIN DE LA NUEVA LÓGICA ---
 
-    # --- Dibujo de nodos y configuración del gráfico (sin cambios) ---
+    # --- Dibujo de nodos y configuración del gráfico ---
     for i, nodo in enumerate(st.session_state.nodos):
         if nodo['tipo'] == 'fijo':
             color = '#DC2626'; edge_color = '#991B1B'
@@ -988,8 +988,7 @@ def crear_tabla_conectividad():
 
     return pd.DataFrame(conectividad_data)
 
-# Función mejorada para generar Excel - ARREGLADA CON PANDAS NATIVO
-# REEMPLAZAR ESTA FUNCIÓN COMPLETA
+# Función mejorada para generar Excel 
 def generar_excel_completo():
     """Generar archivo Excel con todas las tablas (VERSIÓN CON TABLA DE TENSIONES)"""
     if not st.session_state.resultados:
@@ -1000,7 +999,7 @@ def generar_excel_completo():
         output = io.BytesIO()
         
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            # --- Hojas existentes (sin cambios) ---
+            # --- Hojas existentes---
             
             # Hoja 1: Información del proyecto
             info_data = {'Parámetro': ['Usuario', 'Fecha', 'Hora', 'Modo', 'Nodos', 'Elementos', 'Grados de Libertad'], 'Valor': [st.session_state.usuario_nombre, datetime.now().strftime('%d/%m/%Y'), datetime.now().strftime('%H:%M:%S'), st.session_state.modo.capitalize(), len(st.session_state.nodos), len(st.session_state.elementos), len(st.session_state.grados_libertad_info)]}
@@ -1036,13 +1035,13 @@ def generar_excel_completo():
                 })
             pd.DataFrame(resultados_data).to_excel(writer, sheet_name='Resultados', index=False)
 
-            # --- INICIO DE LA MODIFICACIÓN ---
+           
             # Hoja 6: Análisis de Tensiones y Deformaciones
             datos_tensiones = calcular_datos_tensiones(resultado)
             if datos_tensiones:
                 df_tensiones = pd.DataFrame(datos_tensiones)
                 df_tensiones.to_excel(writer, sheet_name='Tensiones_y_Deformaciones', index=False)
-            # --- FIN DE LA MODIFICACIÓN ---
+           
 
         output.seek(0)
         return output.getvalue()
@@ -1051,7 +1050,7 @@ def generar_excel_completo():
         st.error(f"Error al generar Excel: {str(e)}")
         return None
 
-# REEMPLAZAR ESTA FUNCIÓN COMPLETA
+
 def generar_pdf_completo(factor_escala=10):
     """Generar archivo PDF con reporte completo (VERSIÓN CON DETALLE DE INCÓGNITAS)"""
     if not st.session_state.resultados:
@@ -1064,10 +1063,10 @@ def generar_pdf_completo(factor_escala=10):
         styles = getSampleStyleSheet()
         story = []
         
-        # Título e Info del Proyecto (sin cambios)
+        # Título e Info del Proyecto 
         title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=24, spaceAfter=30, alignment=1)
         story.append(Paragraph("Análisis Estructural - Método de Matrices", title_style))
-        # ... (El resto de la info del proyecto, nodos, gráficos no cambia) ...
+       
         info_data = [['Parámetro', 'Valor'], ['Usuario', st.session_state.usuario_nombre], ['Fecha', datetime.now().strftime('%d/%m/%Y')], ['Hora', datetime.now().strftime('%H:%M:%S')], ['Modo', st.session_state.modo.capitalize()], ['Nodos', str(len(st.session_state.nodos))], ['Elementos', str(len(st.session_state.elementos))], ['Grados de Libertad', str(len(st.session_state.grados_libertad_info))]]
         info_table = Table(info_data)
         info_table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey), ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke), ('ALIGN', (0, 0), (-1, -1), 'CENTER'), ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'), ('FONTSIZE', (0, 0), (-1, 0), 14), ('BOTTOMPADDING', (0, 0), (-1, 0), 12), ('BACKGROUND', (0, 1), (-1, -1), colors.beige), ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
@@ -1098,7 +1097,7 @@ def generar_pdf_completo(factor_escala=10):
                 img_buffer_deformado = io.BytesIO(); fig_deformado.savefig(img_buffer_deformado, format='png', dpi=300, bbox_inches='tight'); img_buffer_deformado.seek(0)
                 story.append(Image(img_buffer_deformado, width=400, height=300)); plt.close(fig_deformado); story.append(Spacer(1, 20))
 
-        # --- INICIO DE LA MODIFICACIÓN EN LA TABLA DE RESULTADOS DEL PDF ---
+    
         resultado = st.session_state.resultados
         story.append(Paragraph("Resultados del Análisis", styles['Heading2']))
         
@@ -1126,9 +1125,7 @@ def generar_pdf_completo(factor_escala=10):
         resultados_table = Table(resultados_data, colWidths=[_ * inch for _ in [0.4, 0.5, 0.4, 1.2, 0.8, 1.2, 0.8]])
         resultados_table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey), ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke), ('ALIGN', (0, 0), (-1, -1), 'CENTER'), ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'), ('FONTSIZE', (0, 0), (-1, -1), 10), ('BOTTOMPADDING', (0, 0), (-1, 0), 12), ('BACKGROUND', (0, 1), (-1, -1), colors.beige), ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
         story.append(resultados_table)
-        # --- FIN DE LA MODIFICACIÓN ---
-
-        # (El resto de la generación del PDF sigue igual)
+    
         story.append(PageBreak())
         story.append(Paragraph("Análisis de Tensiones y Deformaciones", styles['Heading2']))
         datos_tensiones = calcular_datos_tensiones(resultado)
@@ -1345,10 +1342,6 @@ def transferir_datos_interactivos():
     st.session_state.step = 6
     st.rerun()
 
-
-# ----------------------------------------------------------------------
-# ------------ FUNCIÓN DE APLICAR GRUPOS CORREGIDA ---------------------
-# ----------------------------------------------------------------------
 def aplicar_propiedades_grupo(nombre_grupo, material, tipo_seccion, parametros_seccion):
     """
     Aplica material y sección a todos los elementos de un grupo.
@@ -1423,9 +1416,6 @@ def aplicar_propiedades_grupo(nombre_grupo, material, tipo_seccion, parametros_s
 
     return elementos_actualizados > 0
 
-# ----------------------------------------------------------------------
-# ------------ NUEVA FUNCIÓN PARA ANÁLISIS DE TENSIONES ----------------
-# ----------------------------------------------------------------------
 def calcular_datos_tensiones(resultado):
     """
     Calcula las tensiones y deformaciones en cada elemento y DEVUELVE LOS DATOS.
@@ -1990,7 +1980,7 @@ elif st.session_state.step == 6:
     st.markdown("## Definición de Elementos")
     st.markdown("Configure cada elemento (barra) del sistema")
     
-    # NUEVA FUNCIONALIDAD: Gestión de grupos de elementos AL INICIO - CORREGIDA
+    
     st.markdown("### 🔗 Grupos de Elementos")
     st.markdown("Cree grupos de elementos para asignar materiales y secciones de forma eficiente a múltiples elementos.")
     
@@ -2302,9 +2292,8 @@ elif st.session_state.step == 7:
             st.error("❌ Error al resolver el sistema. Verifique los datos ingresados.")
 
 # ----------------------------------------------------------------------
-# ------------ BLOQUE DEL PASO 8 REORDENADO Y MEJORADO -----------------
+# ------------ BLOQUE DEL PASO 8 --------------------- -----------------
 # ----------------------------------------------------------------------
-# REEMPLAZAR ESTE BLOQUE COMPLETO
 elif st.session_state.step == 8:
     st.markdown("## 🎉 Resultados del Análisis")
     st.markdown("El análisis estructural se ha completado exitosamente.")
@@ -2312,7 +2301,7 @@ elif st.session_state.step == 8:
     if st.session_state.resultados:
         resultado = st.session_state.resultados
         
-        # --- 1. MÉTRICAS PRINCIPALES (sin cambios) ---
+        # --- 1. MÉTRICAS PRINCIPALES  ---
         st.markdown("### 📈 Métricas Principales")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -2357,9 +2346,9 @@ elif st.session_state.step == 8:
         # Reordenar columnas para mejor visualización
         column_order = ['GL', 'Nodo', 'Dirección', 'Fuerza', 'Detalle Fuerza', 'Desplazamiento', 'Detalle Desplazamiento']
         st.dataframe(df_resultados[column_order], use_container_width=True)
-        # --- FIN DE LA MODIFICACIÓN EN LA TABLA ---
+       
 
-        # (El resto de las tablas siguen igual)
+        
         st.markdown("#### 📍 Tabla de Nodos")
         df_nodos = crear_tabla_nodos()
         if not df_nodos.empty:
@@ -2378,7 +2367,7 @@ elif st.session_state.step == 8:
 
         st.divider()
 
-        # (El resto del código del paso 8 sigue igual)
+        
         st.markdown("### 📊 Visualización Interactiva 3D")
         factor_escala_on_screen = st.slider("Factor de escala para visualización en pantalla:", 1, 1000, 100, key="factor_escala_pantalla")
         
